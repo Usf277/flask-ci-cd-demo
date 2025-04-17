@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello from CI/CD!"
+    return "Hello from CI/CD - Version 2!"
 
 if __name__ == '__main__':
     app.run(debug=True)
