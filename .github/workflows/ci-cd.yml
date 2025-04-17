@@ -29,13 +29,13 @@ jobs:
         run: pytest
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-ci-cd-demo:latest .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-ci-cd-demo:${{ github.run_number }} .
 
       - name: Log in to DockerHub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/flask-ci-cd-demo:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/flask-ci-cd-demo:${{ github.run_number }}
 
   deploy:
     needs: build-test-deploy
@@ -50,5 +50,8 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
 
+      - name: Replace image tag with run number
+        run: sed -i '' "s/__VERSION__/${{ github.run_number }}/g" k8s/deployment.yaml
+        
       - name: Deploy to Kubernetes
         run: kubectl apply -f k8s/
