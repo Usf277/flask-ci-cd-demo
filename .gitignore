@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv
+*.log
+.env
+k8s/admin-user*.yaml
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
